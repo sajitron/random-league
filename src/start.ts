@@ -1,5 +1,5 @@
 import app from './Server';
-import { logger } from './config/Logger';
+import { logger } from './config/logger';
 import { Env } from './config/env';
 
 // Start the server

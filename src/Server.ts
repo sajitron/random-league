@@ -5,7 +5,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { NOT_FOUND, INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import BaseRouter from './routes';
-import { logger } from './config/Logger';
+import { logger } from './config/logger';
 import { connectDB } from './config/db';
 import { Env } from './config/env';
 
