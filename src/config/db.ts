@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { Env } from './env';
-import { logger } from './Logger';
+import { logger } from './logger';
 
 const { environment, mongoURI, mongoTestURI } = Env.all();
 

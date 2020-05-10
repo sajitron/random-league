@@ -5,9 +5,10 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { NOT_FOUND, INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import BaseRouter from './routes';
-import { logger } from './config/Logger';
+import { logger } from './config/logger';
 import { connectDB } from './config/db';
 import { Env } from './config/env';
+import Utils from './utils/utils';
 
 const { environment } = Env.all();
 
@@ -50,7 +51,7 @@ app.use('/v1', BaseRouter);
 
 // handle errors
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   const err: any = new Error('Not Found');
   err.status = NOT_FOUND;
   logger.error(err);
@@ -58,14 +59,9 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  logger.error('Request error');
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  res.status(err.status || INTERNAL_SERVER_ERROR);
-  res.json({ status: 'error', message: err });
+app.use((err: any, req: Request, res: Response) => {
+  logger.error(JSON.stringify(err));
+  return Utils.errorResponse(res, err.message, err.status || INTERNAL_SERVER_ERROR);
 });
 
 // Export express instance
