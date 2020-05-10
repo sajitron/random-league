@@ -4,6 +4,7 @@ const teamSchema = new mongoose.Schema({
   team_name: {
     type: String,
     required: true,
+    unique: true,
   },
   team_logo: {
     type: String,
@@ -19,6 +20,10 @@ const teamSchema = new mongoose.Schema({
       ref: 'fixtures',
     },
   ],
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users',
+  },
   created_at: {
     type: Date,
     default: Date.now,

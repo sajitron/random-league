@@ -4,7 +4,7 @@ import { IRequest } from '../types/custom';
 import httpCodes from 'http-status-codes';
 import UserService from '../services/UserService';
 import Utils from '../utils/utils';
-import { CreateUserSchema, UpdateUserSchema, UserAuthSchema } from './validations/user';
+import { CreateUserSchema, UpdateUserSchema, UserAuthSchema } from './validations/User';
 import { logger } from 'src/config/logger';
 
 export async function newUser(req: Request, res: Response) {

@@ -24,3 +24,16 @@ export const authUser = (req: IRequest, res: Response, next: NextFunction) => {
     return Utils.errorResponse(res, errMessage, httpCodes.UNAUTHORIZED);
   }
 };
+
+export const authAdmin = (req: IRequest, res: Response, next: NextFunction) => {
+  try {
+    if (req.user?.role !== 'admin') {
+      const errMessage = 'Unauthorized action';
+      return Utils.errorResponse(res, errMessage, httpCodes.FORBIDDEN);
+    }
+    next();
+  } catch (err) {
+    const errMessage = 'Error validating account';
+    return Utils.errorResponse(res, errMessage, httpCodes.UNAUTHORIZED);
+  }
+};
