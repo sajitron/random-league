@@ -42,17 +42,25 @@ export async function getTeam(req: Request, res: Response) {
   const teamID = req.params.id;
   try {
     const team = await TeamService.getTeamByID(teamID);
+    if (!team) {
+      const errMessage = 'team does not exist';
+      return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
+    }
     const message = 'Team returned successfully';
     return Utils.successResponse(res, { team }, message, httpCodes.OK);
   } catch (error) {
     logger.error(JSON.stringify(error));
-    return Utils.errorResponse(res, error.message, httpCodes.INTERNAL_SERVER_ERROR);
+    return Utils.errorResponse(res, error.message, httpCodes.NOT_FOUND);
   }
 }
 
 export async function getAllTeams(req: IRequest, res: Response) {
   try {
     const teams = await TeamService.getTeams();
+    if (!teams.length) {
+      const errMessage = 'teams do not exist';
+      return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
+    }
     const message = 'Teams returned successfully';
     return Utils.successResponse(res, { teams }, message, httpCodes.OK);
   } catch (error) {
@@ -67,6 +75,12 @@ export async function updateTeam(req: IRequest, res: Response) {
     const errors = await Utils.validateRequest(req.body, UpdateTeamSchema);
     if (errors) {
       return Utils.errorResponse(res, errors, httpCodes.BAD_REQUEST);
+    }
+
+    const teamExists = await TeamService.getTeamByID(teamID);
+    if (!teamExists) {
+      const errMessage = 'team does not exist';
+      return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
     }
 
     const teamObject: any = {

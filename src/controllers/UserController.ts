@@ -77,6 +77,10 @@ export async function getUser(req: Request, res: Response) {
   const userID = req.params.id;
   try {
     const user = await UserService.getUserByID(userID);
+    if (!user) {
+      const errMessage = 'user does not exist';
+      return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
+    }
     const message = 'User returned successfully';
     return Utils.successResponse(res, { user }, message, httpCodes.OK);
   } catch (error) {
@@ -94,6 +98,10 @@ export async function getAllUsers(req: IRequest, res: Response) {
 
   try {
     const users = await UserService.getUsers();
+    if (!users) {
+      const errMessage = 'users do not exist';
+      return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
+    }
     const message = 'Users returned successfully';
     return Utils.successResponse(res, { users }, message, httpCodes.OK);
   } catch (error) {
@@ -115,6 +123,12 @@ export async function updateUser(req: IRequest, res: Response) {
     const errors = await Utils.validateRequest(req.body, UpdateUserSchema);
     if (errors) {
       return Utils.errorResponse(res, errors, httpCodes.BAD_REQUEST);
+    }
+
+    const existingUser = await UserService.getUserByID(userID);
+    if (!existingUser) {
+      const errMessage = 'user does not exist';
+      return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
     }
 
     const userObject: any = {

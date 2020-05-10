@@ -24,7 +24,7 @@ const TeamService = {
 
   async getTeamByID(id: string) {
     try {
-      const team = await Team.findById(id).populate('creator');
+      const team = await Team.findById(id).populate('creator').populate('fixtures');
       return team;
     } catch (error) {
       throw error;
@@ -33,7 +33,7 @@ const TeamService = {
 
   async getTeams() {
     try {
-      const teams = await Team.find({}).populate('creator');
+      const teams = await Team.find({}).populate('creator').populate('fixtures');
       return teams;
     } catch (error) {
       throw error;
@@ -42,7 +42,9 @@ const TeamService = {
 
   async updateTeam(id: string, data: any) {
     try {
-      const team = await Team.findByIdAndUpdate(id, { $set: data }, { new: true }).populate('creator');
+      const team = await Team.findByIdAndUpdate(id, { $set: data }, { new: true })
+        .populate('creator')
+        .populate('fixtures');
       return team;
     } catch (error) {
       throw error;

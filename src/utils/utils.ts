@@ -6,7 +6,7 @@ import multer from 'multer';
 import { Env } from '../config/env';
 import bcrypt from 'bcryptjs';
 
-const { jwtSecret, cloudinaryApiKey, cloudinaryName, cloudinarySecret } = Env.all();
+const { jwtSecret, cloudinaryApiKey, cloudinaryName, cloudinarySecret, baseURL } = Env.all();
 
 cloudinary.v2.config({
   cloud_name: cloudinaryName,
@@ -89,6 +89,21 @@ const Utils = {
   uploads: multer({ storage }).single('avatar'),
 
   uploader: cloudinary.v2.uploader,
+
+  generateLink() {
+    const codeLength = 8;
+    const digits = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let code = '';
+
+    for (let i = 1; i <= codeLength; i++) {
+      const index = Math.floor(Math.random() * digits.length);
+      code = code + digits[index];
+    }
+
+    const fixtureLink = `${baseURL}/v1/fixtures/link/${code}`;
+
+    return fixtureLink;
+  },
 };
 
 export default Utils;
