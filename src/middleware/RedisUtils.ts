@@ -1,12 +1,16 @@
+import util from 'util';
 import moment from 'moment';
 import { Response, NextFunction } from 'express';
-import { IRequest } from '../types/custom';
 import httpCodes from 'http-status-codes';
+import { IRequest } from '../types/custom';
 import redisClient from '../config/redis';
 import Utils from '../utils/utils';
 import { Env } from 'src/config/env';
+import { logger } from 'src/config/logger';
 
 const { windowSizeInHours, windowLogInterval, maxWindowRequestCount } = Env.all();
+
+const redisGetAsync = util.promisify(redisClient.get).bind(redisClient);
 
 export const rateLimiter = (req: IRequest, res: Response, next: NextFunction) => {
   const authUser = req.user;
@@ -74,3 +78,23 @@ export const rateLimiter = (req: IRequest, res: Response, next: NextFunction) =>
     return next(error);
   }
 };
+
+export async function getCache(req: IRequest) {
+  const url = req.get('host') + req.originalUrl;
+
+  const data = await redisGetAsync(url);
+
+  if (data) {
+    return JSON.parse(data);
+  }
+}
+
+export function cacheData(req: IRequest, data: any) {
+  try {
+    const url = req.get('host') + req.originalUrl;
+    redisClient.setex(url, 21600, JSON.stringify(data));
+    logger.info('Data cached to redis', Date.now());
+  } catch (error) {
+    logger.error(JSON.stringify(error));
+  }
+}
