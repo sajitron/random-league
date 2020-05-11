@@ -5,8 +5,8 @@ import httpCodes from 'http-status-codes';
 import { IRequest } from '../types/custom';
 import redisClient from '../config/redis';
 import Utils from '../utils/utils';
-import { Env } from 'src/config/env';
-import { logger } from 'src/config/logger';
+import { Env } from '../config/env';
+import { logger } from '../config/logger';
 
 const { windowSizeInHours, windowLogInterval, maxWindowRequestCount } = Env.all();
 

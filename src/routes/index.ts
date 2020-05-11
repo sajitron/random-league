@@ -3,7 +3,7 @@ import UserRouter from './Users';
 import TeamRouter from './Teams';
 import { search } from '../controllers/TeamController';
 import FixtureRouter from './Fixture';
-import Utils from 'src/utils/utils';
+import Utils from '../utils/utils';
 
 // Init router and path
 const router = Router();
