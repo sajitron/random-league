@@ -6,6 +6,7 @@ import moment from 'moment';
 import FixtureService from '../services/FixtureService';
 import TeamService from '../services/TeamService';
 import Utils from '../utils/utils';
+import { getCache, cacheData } from '../middleware/RedisUtils';
 import { CreateFixtureSchema, UpdateFixtureSchema } from './validations/Fixture';
 import { logger } from 'src/config/logger';
 
@@ -68,11 +69,17 @@ export async function newFixture(req: IRequest, res: Response) {
 export async function getFixtureByLink(req: Request, res: Response) {
   const url = req.protocol + '://' + req.get('host') + req.originalUrl;
   try {
+    const cacheFixture = await getCache(req);
+    if (cacheFixture) {
+      const message = 'Fixture returned successfully';
+      return Utils.successResponse(res, { fixture: cacheFixture }, message, httpCodes.OK);
+    }
     const fixture = await FixtureService.getFixtureByLink(url);
     if (!fixture) {
       const errMessage = 'fixture does not exist';
       return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
     }
+    cacheData(req, fixture);
     const message = 'Fixture returned successfully';
     return Utils.successResponse(res, { fixture }, message, httpCodes.OK);
   } catch (error) {
@@ -84,11 +91,17 @@ export async function getFixtureByLink(req: Request, res: Response) {
 export async function getFixture(req: Request, res: Response) {
   const fixtureID = req.params.id;
   try {
+    const cacheFixture = await getCache(req);
+    if (cacheFixture) {
+      const message = 'Fixture returned successfully';
+      return Utils.successResponse(res, { fixture: cacheFixture }, message, httpCodes.OK);
+    }
     const fixture = await FixtureService.getFixtureByID(fixtureID);
     if (!fixture) {
       const errMessage = 'fixture does not exist';
       return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
     }
+    cacheData(req, fixture);
     const message = 'Fixture returned successfully';
     return Utils.successResponse(res, { fixture }, message, httpCodes.OK);
   } catch (error) {
@@ -99,11 +112,17 @@ export async function getFixture(req: Request, res: Response) {
 
 export async function getAllFixtures(req: Request, res: Response) {
   try {
+    const cacheFixtures = await getCache(req);
+    if (cacheFixtures) {
+      const message = 'Fixture returned successfully';
+      return Utils.successResponse(res, { fixtures: cacheFixtures }, message, httpCodes.OK);
+    }
     const fixtures = await FixtureService.getFixtures();
     if (!fixtures) {
       const errMessage = 'fixtures do not exist';
       return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
     }
+    cacheData(req, fixtures);
     const message = 'Fixture returned successfully';
     return Utils.successResponse(res, { fixtures }, message, httpCodes.OK);
   } catch (error) {
@@ -114,11 +133,17 @@ export async function getAllFixtures(req: Request, res: Response) {
 
 export async function getCompletedFixtures(req: Request, res: Response) {
   try {
+    const cacheFixtures = await getCache(req);
+    if (cacheFixtures) {
+      const message = 'Fixture returned successfully';
+      return Utils.successResponse(res, { fixtures: cacheFixtures }, message, httpCodes.OK);
+    }
     const fixtures = await FixtureService.getFixtureByStatus(true);
     if (!fixtures) {
       const errMessage = 'no completed fixtures';
       return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
     }
+    cacheData(req, fixtures);
     const message = 'Completed Fixtures returned successfully';
     return Utils.successResponse(res, { fixtures }, message, httpCodes.OK);
   } catch (error) {
@@ -129,11 +154,17 @@ export async function getCompletedFixtures(req: Request, res: Response) {
 
 export async function getPendingFixtures(req: Request, res: Response) {
   try {
+    const cacheFixtures = await getCache(req);
+    if (cacheFixtures) {
+      const message = 'Fixture returned successfully';
+      return Utils.successResponse(res, { fixtures: cacheFixtures }, message, httpCodes.OK);
+    }
     const fixtures = await FixtureService.getFixtureByStatus(false);
     if (!fixtures) {
       const errMessage = 'no pending fixtures';
       return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
     }
+    cacheData(req, fixtures);
     const message = 'Completed Fixtures returned successfully';
     return Utils.successResponse(res, { fixtures }, message, httpCodes.OK);
   } catch (error) {

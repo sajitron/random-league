@@ -4,6 +4,7 @@ import { IRequest } from '../types/custom';
 import httpCodes from 'http-status-codes';
 import UserService from '../services/UserService';
 import Utils from '../utils/utils';
+import { getCache, cacheData } from '../middleware/RedisUtils';
 import { CreateUserSchema, UpdateUserSchema, UserAuthSchema } from './validations/User';
 import { logger } from 'src/config/logger';
 
@@ -76,11 +77,17 @@ export async function authUser(req: Request, res: Response) {
 export async function getUser(req: Request, res: Response) {
   const userID = req.params.id;
   try {
+    const cacheUser = await getCache(req);
+    if (cacheUser) {
+      const message = 'Fixture returned successfully';
+      return Utils.successResponse(res, { user: cacheUser }, message, httpCodes.OK);
+    }
     const user = await UserService.getUserByID(userID);
     if (!user) {
       const errMessage = 'user does not exist';
       return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
     }
+    cacheData(req, user);
     const message = 'User returned successfully';
     return Utils.successResponse(res, { user }, message, httpCodes.OK);
   } catch (error) {
@@ -97,11 +104,17 @@ export async function getAllUsers(req: IRequest, res: Response) {
   }
 
   try {
+    const cacheUsers = await getCache(req);
+    if (cacheUsers) {
+      const message = 'Fixture returned successfully';
+      return Utils.successResponse(res, { users: cacheUsers }, message, httpCodes.OK);
+    }
     const users = await UserService.getUsers();
     if (!users) {
       const errMessage = 'users do not exist';
       return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
     }
+    cacheData(req, users);
     const message = 'Users returned successfully';
     return Utils.successResponse(res, { users }, message, httpCodes.OK);
   } catch (error) {
