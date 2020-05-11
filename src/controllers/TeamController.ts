@@ -137,7 +137,6 @@ export async function removeTeam(req: IRequest, res: Response) {
 
 export async function search(req: Request, res: Response) {
   const searchString = req.params.search;
-  logger.info(searchString);
   try {
     const result = await TeamService.search(searchString);
     const message = 'Search results returned';

@@ -12,6 +12,10 @@ interface IEnv {
   cloudinarySecret: string;
   cloudinaryApiKey: string;
   baseURL: string;
+  redisURL: string;
+  windowSizeInHours: number;
+  maxWindowRequestCount: number;
+  windowLogInterval: number;
 }
 
 const config: IEnv = {
@@ -24,6 +28,10 @@ const config: IEnv = {
   cloudinarySecret: process.env.CLOUDINARY_SECRET!,
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY!,
   baseURL: process.env.BASE_URL!,
+  redisURL: process.env.REDIS_URL!,
+  windowSizeInHours: Number(process.env.WINDOW_SIZE_IN_HOURS),
+  maxWindowRequestCount: Number(process.env.MAX_WINDOW_REQUEST_COUNT),
+  windowLogInterval: Number(process.env.WINDOW_LOG_INTERVAL_IN_HOURS),
 };
 
 export class Env {
