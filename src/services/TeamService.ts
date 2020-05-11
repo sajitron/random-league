@@ -84,7 +84,7 @@ const TeamService = {
             },
           },
         ],
-      });
+      }).populate('fixtures');
 
       const fixtures = await Fixture.find({
         $or: [
@@ -95,7 +95,9 @@ const TeamService = {
             },
           },
         ],
-      });
+      })
+        .populate('home_team')
+        .populate('away_team');
       return { teams, fixtures };
     } catch (error) {
       throw error;
