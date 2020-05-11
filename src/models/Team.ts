@@ -14,6 +14,10 @@ const teamSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  stadium: {
+    type: String,
+    required: true,
+  },
   fixtures: [
     {
       type: mongoose.Schema.Types.ObjectId,

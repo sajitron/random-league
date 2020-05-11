@@ -21,6 +21,8 @@ export async function newTeam(req: IRequest, res: Response) {
     }
     const teamObject = req.body;
     teamObject.team_name = teamObject.team_name.toLowerCase();
+    teamObject.stadium = teamObject.stadium.toLowerCase();
+    teamObject.coach = teamObject.coach.toLowerCase();
     teamObject.creator = req.user?._id;
 
     if (req.file) {
@@ -96,7 +98,10 @@ export async function updateTeam(req: IRequest, res: Response) {
       teamObject.team_name = req.body.team_name.toLowerCase();
     }
     if (req.body.coach) {
-      teamObject.coach = req.body.coach;
+      teamObject.coach = req.body.coach.toLowerCase();
+    }
+    if (req.body.stadium) {
+      teamObject.stadium = req.body.stadium.toLowerCase();
     }
     if (req.file) {
       teamObject.team_logo = await UserService.uploadImage(req);
@@ -127,5 +132,18 @@ export async function removeTeam(req: IRequest, res: Response) {
   } catch (error) {
     logger.error(JSON.stringify(error));
     return Utils.errorResponse(res, error.message, httpCodes.INTERNAL_SERVER_ERROR);
+  }
+}
+
+export async function search(req: Request, res: Response) {
+  const searchString = req.params.search;
+  logger.info(searchString);
+  try {
+    const result = await TeamService.search(searchString);
+    const message = 'Search results returned';
+    return Utils.successResponse(res, { ...result }, message, httpCodes.OK);
+  } catch (error) {
+    logger.error(JSON.stringify(error));
+    return Utils.errorResponse(res, error.message, httpCodes.NOT_FOUND);
   }
 }

@@ -1,4 +1,5 @@
 import Team from '../models/Team';
+import Fixture from '../models/Fixture';
 
 const TeamService = {
   async createTeam(data: any) {
@@ -55,6 +56,47 @@ const TeamService = {
     try {
       await Team.findByIdAndRemove(id);
       return 'team removed';
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async search(searchString: string) {
+    try {
+      const teams = await Team.find({
+        $or: [
+          {
+            team_name: {
+              $regex: searchString,
+              $options: 'i',
+            },
+          },
+          {
+            stadium: {
+              $regex: searchString,
+              $options: 'i',
+            },
+          },
+          {
+            coach: {
+              $regex: searchString,
+              $options: 'i',
+            },
+          },
+        ],
+      });
+
+      const fixtures = await Fixture.find({
+        $or: [
+          {
+            venue: {
+              $regex: searchString,
+              $options: 'i',
+            },
+          },
+        ],
+      });
+      return { teams, fixtures };
     } catch (error) {
       throw error;
     }
