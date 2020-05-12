@@ -23,7 +23,7 @@ export const rateLimiter = (req: IRequest, res: Response, next: NextFunction) =>
       const errMessage = 'Redis client does not exist!';
       return Utils.errorResponse(res, errMessage, httpCodes.UNPROCESSABLE_ENTITY);
     }
-    // * fetch records of current user using IP address, returns null when no record is found
+    // * fetch records of current user using user ID, returns null when no record is found
     redisClient.get(authUser?._id!, (err, record) => {
       if (err) {
         return Utils.errorResponse(res, err.message, httpCodes.UNPROCESSABLE_ENTITY);
