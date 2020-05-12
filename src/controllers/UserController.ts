@@ -6,7 +6,7 @@ import UserService from '../services/UserService';
 import Utils from '../utils/utils';
 import { getCache, cacheData } from '../middleware/RedisUtils';
 import { CreateUserSchema, UpdateUserSchema, UserAuthSchema } from './validations/User';
-import { logger } from 'src/config/logger';
+import { logger } from '../config/logger';
 
 export async function newUser(req: Request, res: Response) {
   try {
@@ -79,7 +79,7 @@ export async function getUser(req: Request, res: Response) {
   try {
     const cacheUser = await getCache(req);
     if (cacheUser) {
-      const message = 'Fixture returned successfully';
+      const message = 'User returned successfully';
       return Utils.successResponse(res, { user: cacheUser }, message, httpCodes.OK);
     }
     const user = await UserService.getUserByID(userID);
@@ -106,7 +106,7 @@ export async function getAllUsers(req: IRequest, res: Response) {
   try {
     const cacheUsers = await getCache(req);
     if (cacheUsers) {
-      const message = 'Fixture returned successfully';
+      const message = 'Users returned successfully';
       return Utils.successResponse(res, { users: cacheUsers }, message, httpCodes.OK);
     }
     const users = await UserService.getUsers();

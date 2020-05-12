@@ -8,7 +8,7 @@ import TeamService from '../services/TeamService';
 import Utils from '../utils/utils';
 import { getCache, cacheData } from '../middleware/RedisUtils';
 import { CreateFixtureSchema, UpdateFixtureSchema } from './validations/Fixture';
-import { logger } from 'src/config/logger';
+import { logger } from '../config/logger';
 
 export async function newFixture(req: IRequest, res: Response) {
   try {

@@ -1,0 +1,48 @@
+version: '3.5'
+
+services:
+  random-league:
+    image: random-league
+    ports:
+      - 7300
+    labels:
+      kompose.service.type: NodePort
+    env_file: .env
+    volumes:
+      - .:/home/random-league
+    networks:
+      - main_network
+    depends_on:
+      - mongo
+      - redis
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_URI: mongodb://mongo:27017/random-league
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data/db
+    networks:
+      - main_network
+
+  redis:
+    image: redis:alpine
+    environment:
+      REDIS_URL: redis://redis:6379
+    ports:
+      - '6379:6379'
+      - '7373:7373'
+    volumes:
+      - ./.data/redis:/data/cache
+    networks:
+      - main_network
+
+networks:
+  main_network:
+    name: randomleague
+    driver: bridge
+
+volumes:
+  mongo:

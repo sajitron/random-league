@@ -7,7 +7,7 @@ import UserService from '../services/UserService';
 import Utils from '../utils/utils';
 import { getCache, cacheData } from '../middleware/RedisUtils';
 import { CreateTeamSchema, UpdateTeamSchema } from './validations/Team';
-import { logger } from 'src/config/logger';
+import { logger } from '../config/logger';
 
 export async function newTeam(req: IRequest, res: Response) {
   try {
@@ -46,7 +46,7 @@ export async function getTeam(req: Request, res: Response) {
   try {
     const cacheTeam = await getCache(req);
     if (cacheTeam) {
-      const message = 'Fixture returned successfully';
+      const message = 'Team returned successfully';
       return Utils.successResponse(res, { team: cacheTeam }, message, httpCodes.OK);
     }
     const team = await TeamService.getTeamByID(teamID);
@@ -67,7 +67,7 @@ export async function getAllTeams(req: IRequest, res: Response) {
   try {
     const cacheTeams = await getCache(req);
     if (cacheTeams) {
-      const message = 'Fixture returned successfully';
+      const message = 'Teams returned successfully';
       return Utils.successResponse(res, { teams: cacheTeams }, message, httpCodes.OK);
     }
     const teams = await TeamService.getTeams();
@@ -153,7 +153,7 @@ export async function search(req: Request, res: Response) {
   try {
     const cacheResult = await getCache(req);
     if (cacheResult) {
-      const message = 'Fixture returned successfully';
+      const message = 'Search results returned';
       return Utils.successResponse(res, { ...cacheResult }, message, httpCodes.OK);
     }
     const result = await TeamService.search(searchString);
