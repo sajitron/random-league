@@ -221,7 +221,7 @@ export const fixtures = [
     _id: new ObjectID(),
     home_team: teams[2]._id,
     away_team: teams[3]._id,
-    match_date: new Date('2020-05-11'),
+    match_date: new Date('2020-07-11'),
     completed: true,
     scores: {
       home_team: 3,

@@ -1,4 +1,16 @@
-import { teams, populateTeams, post, authPost, get, authGet, authPut, put, authDelete, iDelete } from './seeds/seed';
+import {
+  teams,
+  populateTeams,
+  post,
+  authPost,
+  get,
+  authGet,
+  authPut,
+  put,
+  authDelete,
+  iDelete,
+  populateUsers,
+} from './seeds/seed';
 
 const noNameTeam = {
   coach: 'jose mourinho',
@@ -34,6 +46,7 @@ const newAdminUser = {
 
 describe('#all team tests', () => {
   beforeEach(async (done) => {
+    populateUsers(done);
     populateTeams(done);
   });
 
