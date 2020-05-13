@@ -1,15 +1,4 @@
-import {
-  users,
-  populateUsers,
-  populateTeams,
-  populateFixtures,
-  post,
-  get,
-  authGet,
-  authPut,
-  authDelete,
-  iDelete,
-} from './seeds/seed';
+import { users, populateUsers, post, get, authGet, authPut, authDelete } from './seeds/seed';
 
 const noEmailUser = {
   first_name: 'Rui',
@@ -44,8 +33,6 @@ const newAdminUser = {
 describe('#all user tests', () => {
   beforeEach(async (done) => {
     populateUsers(done);
-    populateTeams(done);
-    populateFixtures(done);
   });
 
   describe('new users', () => {
@@ -302,7 +289,7 @@ describe('#all user tests', () => {
       const userID = users[0]._id;
       const newUserResponse = await post('/v1/users', newUser);
 
-      const response = await iDelete(`/v1/users/${userID}`, newUserResponse.body.data.token);
+      const response = await authDelete(`/v1/users/${userID}`, newUserResponse.body.data.token);
       expect(response.status).toBe(401);
       expect(response.body.status).toBe('error');
       expect(response.body.message).toBe('Unauthorized request');

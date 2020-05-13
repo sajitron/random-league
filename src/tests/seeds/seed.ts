@@ -1,5 +1,4 @@
 import request from 'supertest';
-// import { NextFunction } from 'express';
 import { ObjectID } from 'mongodb';
 import app from '../../Server';
 import User from '../../models/User';
@@ -42,6 +41,16 @@ export function authPut(url: string, body: any, token: string) {
   return httpRequest;
 }
 
+export function put(url: string, body: any) {
+  const httpRequest = request(app).put(url);
+
+  httpRequest.send(body);
+  httpRequest.set('Accept', 'application/json');
+  httpRequest.set('Origin', baseURL);
+
+  return httpRequest;
+}
+
 export function get(url: string) {
   const httpRequest = request(app).get(url);
 
@@ -61,12 +70,11 @@ export function authGet(url: string, token: string) {
   return httpRequest;
 }
 
-export function iDelete(url: string, token: string) {
+export function iDelete(url: string) {
   const httpRequest = request(app).delete(url);
 
   httpRequest.set('Accept', 'application/json');
   httpRequest.set('Origin', baseURL);
-  httpRequest.set('Authorization', `Bearer ${token}`);
 
   return httpRequest;
 }
