@@ -34,7 +34,7 @@ const UserService = {
 
   async getUsers() {
     try {
-      const users = await User.find({}).select('-password');
+      const users = await User.find({}).select('-password').sort({ created_at: -1 });
       return users;
     } catch (error) {
       throw error;

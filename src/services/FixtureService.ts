@@ -15,8 +15,8 @@ const FixtureService = {
 
   async getFixtureByVenue(venue: string) {
     try {
-      const fixture = await Fixture.find({ venue });
-      return fixture;
+      const fixtures = await Fixture.find({ venue }).sort({ created_at: -1 });
+      return fixtures;
     } catch (error) {
       throw error;
     }
@@ -33,7 +33,10 @@ const FixtureService = {
 
   async getFixtureByStatus(completed: boolean) {
     try {
-      const fixtures = await Fixture.find({ completed }).populate('home_team').populate('away_team');
+      const fixtures = await Fixture.find({ completed })
+        .populate('home_team')
+        .populate('away_team')
+        .sort({ created_at: -1 });
       return fixtures;
     } catch (error) {
       throw error;
@@ -51,7 +54,7 @@ const FixtureService = {
 
   async getFixtures() {
     try {
-      const users = await Fixture.find({}).populate('home_team').populate('away_team');
+      const users = await Fixture.find({}).populate('home_team').populate('away_team').sort({ created_at: -1 });
       return users;
     } catch (error) {
       throw error;

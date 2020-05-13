@@ -34,7 +34,7 @@ const TeamService = {
 
   async getTeams() {
     try {
-      const teams = await Team.find({}).populate('creator').populate('fixtures');
+      const teams = await Team.find({}).populate('creator').populate('fixtures').sort({ created_at: -1 });
       return teams;
     } catch (error) {
       throw error;
