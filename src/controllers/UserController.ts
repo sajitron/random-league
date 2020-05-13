@@ -150,9 +150,11 @@ export async function updateUser(req: IRequest, res: Response) {
 
     // * only admins should change a user role to admin
     if (req.body.role) {
-      authUser?.role === 'admin'
-        ? (userObject.role = req.body.role)
-        : Utils.errorResponse(res, 'Unauthorized request', httpCodes.UNAUTHORIZED);
+      if (authUser?.role === 'admin') {
+        userObject.role = req.body.role;
+      } else {
+        return Utils.errorResponse(res, 'Unauthorized request', httpCodes.UNAUTHORIZED);
+      }
     }
     if (req.body.first_name) {
       userObject.first_name = req.body.first_name;
