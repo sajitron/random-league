@@ -51,7 +51,7 @@ export const rateLimiter = (req: IRequest, res: Response, next: NextFunction) =>
       }, 0);
       // * if number of requests made is greater than or equal to the desired maximum, return error
       if (totalWindowRequestsCount >= maxWindowRequestCount) {
-        const errMessage = `You have exceeded the ${maxWindowRequestCount} requests in ${windowSizeInHours} hrs limit!`;
+        const errMessage = `You have exceeded the ${maxWindowRequestCount} requests in ${windowSizeInHours} hours limit!`;
         return Utils.errorResponse(res, errMessage, httpCodes.TOO_MANY_REQUESTS);
       } else {
         // * if number of requests made is less than allowed maximum, log new entry
@@ -92,7 +92,7 @@ export async function getCache(req: IRequest) {
 export function cacheData(req: IRequest, data: any) {
   try {
     const url = req.get('host') + req.originalUrl;
-    redisClient.setex(url, 21600, JSON.stringify(data));
+    redisClient.setex(url, 3600, JSON.stringify(data)); // * cache for one hour
     logger.info('Data cached to redis', Date.now());
   } catch (error) {
     logger.error(JSON.stringify(error));

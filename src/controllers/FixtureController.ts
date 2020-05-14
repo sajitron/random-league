@@ -135,7 +135,7 @@ export async function getCompletedFixtures(req: Request, res: Response) {
   try {
     const cacheFixtures = await getCache(req);
     if (cacheFixtures) {
-      const message = 'Fixture returned successfully';
+      const message = 'Completed fixtures returned successfully';
       return Utils.successResponse(res, { fixtures: cacheFixtures }, message, httpCodes.OK);
     }
     const fixtures = await FixtureService.getFixtureByStatus(true);
@@ -144,7 +144,7 @@ export async function getCompletedFixtures(req: Request, res: Response) {
       return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
     }
     cacheData(req, fixtures);
-    const message = 'Completed Fixtures returned successfully';
+    const message = 'Completed fixtures returned successfully';
     return Utils.successResponse(res, { fixtures }, message, httpCodes.OK);
   } catch (error) {
     logger.error(JSON.stringify(error));
@@ -156,7 +156,7 @@ export async function getPendingFixtures(req: Request, res: Response) {
   try {
     const cacheFixtures = await getCache(req);
     if (cacheFixtures) {
-      const message = 'Fixture returned successfully';
+      const message = 'Pending fixtures returned successfully';
       return Utils.successResponse(res, { fixtures: cacheFixtures }, message, httpCodes.OK);
     }
     const fixtures = await FixtureService.getFixtureByStatus(false);
@@ -165,7 +165,7 @@ export async function getPendingFixtures(req: Request, res: Response) {
       return Utils.errorResponse(res, errMessage, httpCodes.NOT_FOUND);
     }
     cacheData(req, fixtures);
-    const message = 'Completed Fixtures returned successfully';
+    const message = 'Pending Fixtures returned successfully';
     return Utils.successResponse(res, { fixtures }, message, httpCodes.OK);
   } catch (error) {
     logger.error(JSON.stringify(error));
