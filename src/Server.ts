@@ -48,6 +48,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Route
 app.use('/v1', BaseRouter);
+app.use('/', (req: Request, res: Response) => {
+  return Utils.successResponse(res, { message: 'Welcome!' }, 'Home Page', 200);
+});
 
 // handle errors
 
