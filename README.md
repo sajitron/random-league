@@ -35,6 +35,7 @@
   - REDIS_URL=redis://redis:6379
   - MONGO_URI=mongodb://mongo:27017/random-league
 
+- Run `yarn build`
 - Run _docker build . -t <tagname>_ e.g `docker build . -t random-league`
 - Run _docker-compose up_ from the root directory.
 - Run _docker ps_ from the root directory (in another terminal window) to get the available port.
